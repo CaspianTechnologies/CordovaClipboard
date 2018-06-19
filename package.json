@@ -6,7 +6,7 @@
     "name": "VersoSolutions"
   },
   "cordova": {
-    "id": "cordova-plugin-clipboard",
+    "id": "CordovaClipboard",
     "platforms": [
       "android",
 	  "browser"

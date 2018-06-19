@@ -37,21 +37,25 @@ public class Clipboard extends CordovaPlugin {
                 callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, e.toString()));
             }
         } else if (action.equals(actionPaste)) {
-            if (!clipboard.getPrimaryClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-                callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.NO_RESULT));
-            }
+            ClipDescription primaryClipDescription = clipboard.getPrimaryClipDescription();
 
-            try {
-                ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
-                String text = item.getText().toString();
+            if (primaryClipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_HTML) ||
+                primaryClipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
 
-                if (text == null) text = "";
+                try {
+                  ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
+                  String text = item.getText().toString();
 
-                callbackContext.success(text);
+                  if (text == null) text = "";
 
-                return true;
-            } catch (Exception e) {
-                callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, e.toString()));
+                  callbackContext.success(text);
+
+                  return true;
+                } catch (Exception e) {
+                  callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, e.toString()));
+                }
+            } else {
+              callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.NO_RESULT));
             }
         }
 
